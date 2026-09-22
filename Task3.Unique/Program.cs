@@ -1,33 +1,46 @@
 using System;
-namespace Task3
+
+namespace Task3.Unique
 {
-   class Program
-   {
+    class Program
+    {
+     
+        public static int[] GetUnique(int[] source)
+        {
+            int[] temp = new int[source.Length]; 
+            int count = 0;
 
-    static bool IsExists(int[] a, int b)
-    {      
-      foreach(int el in a)
-        if (el==b) return true;
-      return false;
+            for (int i = 0; i < source.Length; i++)
+            {
+                bool found = false;
+                for (int j = 0; j < count; j++)
+                {
+                    if (temp[j] == source[i])
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    temp[count] = source[i];
+                    count++;
+                }
+            }
+
+            int[] result = new int[count];
+            for (int i = 0; i < count; i++)
+                result[i] = temp[i];
+            return result;
+        }
+
+        static void Main(string[] args)
+        {
+            int[] source = { 1, 2, 2, 3, 4, 4, 4, 5 };
+            Console.WriteLine("Исходный:   " + string.Join(", ", source));
+
+            int[] unique = GetUnique(source);
+            Console.WriteLine("Уникальные: " + string.Join(", ", unique));
+        }
     }
-
-     static void Main()
-     {
-        int[] arr=new int[10];
-        Random random=new Random();
-        for(int i=0;i<arr.Length;i++)
-          arr[i]=random.Next(1,6);
-        System.Console.WriteLine(string.Join(", ", arr)); 
-        int j=0;       
-        int[] t=new int[0];
-        foreach(int el in arr)
-          if (!IsExists(t, el))
-          {
-            Array.Resize(ref t,j+1);//Вот так не хорошо!
-            t[j]=el;
-            j++;
-          }
-           System.Console.WriteLine(string.Join(", ", t));
-     }
-   }
 }

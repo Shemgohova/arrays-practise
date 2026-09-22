@@ -2,55 +2,57 @@ using System;
 
 namespace Task2.InputSort
 {
-    class Program 
+    class Program
     {
         static void Main(string[] args)
         {
             int n;
             while (true)
             {
-                Console.Write("Введите кол-во элементов: ");
+                Console.Write("Введите количество элементов: ");
                 if (int.TryParse(Console.ReadLine(), out n) && n > 0)
-                {
                     break;
-                }
+                Console.WriteLine("Ошибка: введите целое число больше 0.");
             }
-            int[] numbers = new int[n];
+            int[] array = new int[n];
             for (int i = 0; i < n; i++)
             {
-                Console.Write($"Элемент [{i}]: ");
-                numbers[i] = int.Parse(Console.ReadLine());
-                
+                while (true)
+                {
+                    Console.Write($"Элемент [{i}]: ");
+                    try
+                    {
+                        array[i] = int.Parse(Console.ReadLine());
+                        break;
+                    }
+                    catch (FormatException)
+                    {
+                        Console.WriteLine("Ошибка: Введите целое число!");
+                    }
+                    catch (OverflowException)
+                    {
+                        Console.WriteLine("Ошибка: Число слишком большое!");
+                    }
+                }
             }
+            Console.WriteLine("\nИсходный массив:  " + string.Join(", ", array));
+            int[] reversed = new int[n];
+            for (int i = 0; i < n; i++)
+                reversed[i] = array[n - 1 - i];
+            Console.WriteLine("Обратный порядок: " + string.Join(", ", reversed));
 
-            Console.WriteLine();
-            Console.WriteLine($"Исходный маaссив: {string.Join(", ", numbers)}");
+            Array.Sort(array);
+            Console.WriteLine("Отсортированный:  " + string.Join(", ", array));
 
-            int[] reversed = (int[])numbers.Clone();
-            Array.Reverse(reversed);
-            Console.WriteLine($"Обратный порядок {string.Join(", ", reversed)}");
-
-            Array.Sort(numbers);
-            Console.WriteLine($"Отсортированный массив {string.Join(", ", numbers)}");
-
-            int max = numbers[0];
-            int min = numbers[0];
-
-            for (int i = 1; i < numbers.Length; i++)
+            int max = array[0];
+            int min = array[0];
+            foreach (int x in array)
             {
-                if (numbers[i] > max)
-                {
-                    max = numbers[i];
-                }
-                if (numbers[i] < min)
-                {
-                    min = numbers[i];
-                }
+                if (x > max) max = x;
+                if (x < min) min = x;
             }
-
             Console.WriteLine($"Максимум: {max}");
             Console.WriteLine($"Минимум: {min}");
         }
     }
-
 }
